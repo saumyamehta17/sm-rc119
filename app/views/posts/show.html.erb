@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @post.name %>
+</p>
+
+<% unless @post.comments.blank? %>
+	<h4>Comments</h4>
+	<div style="border:2px black solid; margin-right:70%; padding:5px;">
+		<% @post.comments.each do |comm| %>
+
+			<p>
+			  <strong>Commenter:</strong>
+			  <%= comm.name %>
+			</p>
+
+			  <strong>Comment:</strong>
+			  <%= comm.content %>
+			  <p>--------------------------------</p>
+
+			  <%# if session[:comment_ids] && session[:comment_ids].include?(comm.id) && comm.created_at > 1.minutes.ago %>
+			    <%#= link_to "Edit" , edit_post_comment_path(@post,comm) %>
+			  <%# end %>
+
+			  <% if user_session.edit_comment?(comm) %>
+			    <%= link_to "Edit" , edit_post_comment_path(@post,comm) %>
+			  <% end %>
+
+		<% end %>
+	</div>
+<% end %>
+
+
+<h4>Add comments:</h4>
+<%= simple_form_for([@post, @post.comments.build]) do |comm| %>
+   <%= comm.input :name  %>
+   <%= comm.input :content %>
+   <%= comm.submit %>
+<% end %>
+
+
+<%= link_to 'Edit', edit_post_path(@post) %> |
+<%= link_to 'Back', posts_path %>
+
+	
